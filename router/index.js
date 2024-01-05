@@ -1,8 +1,8 @@
-import { FastifyInstance, HTTPMethods } from "fastify";
-export async function api_router() {
+// import { FastifyInstance, HTTPMethods } from "fastify";
+export async function api_router(fastify) {
     // console.log('开始路由', fastify)
     function routerAdd(method = 'POST', path = '', handler) {
-        FastifyInstance.router({
+        fastify.route({
             method,
             path,
             schema: {
