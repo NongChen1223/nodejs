@@ -1,7 +1,5 @@
-import { API_JSON_SCHEMA } from "../common/constant.js";
-import  { STATE_CODE } from  "../common/status.js";
-import { db } from  '../util/mongodb.js'
-import { ObjectId  } from "mongodb";
+import { Notice_Router } from  '../views/notice.js'
+import { API_JSON_SCHEMA} from "../common/constant.js";
 export async function api_router(fastify) {
     // console.log('开始路由', fastify)
     function RouteAdd(method = 'POST', path = '', handler) {
@@ -23,53 +21,9 @@ export async function api_router(fastify) {
             message: 'cnm'
         }
     });
-    RouteAdd('POST','/notice/add',async(req,reply)=>{
-        const { body } = req
-        try {
-            if(!body.title){
-                throw new Error('请输入公告标题')
-            }
-            if(!body.content){
-                throw new Error('请输入公告内容')
-            }
-            const db_notice =  db.mongo.test_db.collection('notice')
-            let t_date = new Date().getTime()
-            let res = await db_notice.insertOne({
-                t_date,
-                t_title:body.title,
-                t_content:body.content,
-                t_name:body?.name || 'admin'
-            })
-            return {
-                code: STATE_CODE.SUCCESS,
-                data: res,
-                message: "创建公告成功"
-            }
-        }catch (err){
-            throw new Error('创建公告失败',err)
-        }
-
-    })
-    RouteAdd('POST','/notice/delet',async (req,reply)=>{
-        const { body } = req
-        try {
-            if(!body.ids || body.ids.length == 0){
-                throw new Error('请传入公告ID')
-            }
-            const db_notice =  db.mongo.test_db.collection('notice')
-            const res = db_notice.deleteMany({
-                _id:{ $in:ids.map(id=>ObjectId(id)) }
-            })
-            return {
-                code: STATE_CODE.SUCCESS,
-                data: res,
-                message: "删除公告成功"
-            }
-        }catch (err){
-            throw new Error('删除公告失败',err)
-        }
-    })
-    RouteAdd('POST','/notice/getList',async (req,reply)=>{
-
-    })
+    RouteAdd('POST','/notice/add',Notice_Router.addNotice)
+    RouteAdd('POST','/notice/update',Notice_Router.updateNotice)
+    RouteAdd('POST','/notice/delete',Notice_Router.deletNotice)
+    RouteAdd('POST','/notice/getList',Notice_Router.getNoticeList)
+    RouteAdd('POST','/notice/detail',Notice_Router.getNoticeDetail)
 }
