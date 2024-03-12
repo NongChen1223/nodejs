@@ -24,12 +24,12 @@ export class Notice_Router{
         try {
             const db_notice =  db.mongo.test_db.collection('notice')
             let res = await db_notice.insertOne({
-                t_date,
-                t_title:body.title,
-                t_content:body.content,
-                t_name:body?.name || 'admin',
-                t_isDelete:false,//删除
-                t_status:true,//上下架状态
+                date,
+                title:body.title,
+                content:body.content,
+                name:body?.name || 'admin',
+                isDelete:false,//删除
+                status:true,//上下架状态
             })
             return {
                 code: STATE_CODE.SUCCESS,
@@ -49,7 +49,7 @@ export class Notice_Router{
             const db_notice =  db.mongo.test_db.collection('notice')
             const res = db_notice.updateMany(
                 { _id:{ $in:body.ids.map(id=> new ObjectId(id)) } },
-                { $set: { "t_isDelete": true }}
+                { $set: { "isDelete": true }}
             )
             return {
                 code: STATE_CODE.SUCCESS,
@@ -74,7 +74,7 @@ export class Notice_Router{
             const db_notice =  db.mongo.test_db.collection('notice')
             const res = db_notice.updateMany(
                 { _id:{ $in:body.ids.map(id=> new ObjectId(id)) } },
-                { $set: { "t_status": body?.status }}
+                { $set: { "status": body?.status }}
             )
             return {
                 code: STATE_CODE.SUCCESS,
@@ -96,7 +96,7 @@ export class Notice_Router{
         try {
             const res = await db_notice.findOne({
                 _id:new ObjectId(body.id),
-                t_isDelete:false
+                isDelete:false
             })
             console.log('查询公告详情',res)
             return {
@@ -113,19 +113,19 @@ export class Notice_Router{
         const { body } = req
         const { pageSize = DEFAULT_MIN_PAGESIZE,pageCurrent = DEFAULT_PAGECURRENT } = body
         const query = {
-            t_isDelete:false
+            isDelete:false
         }
         if(body?.id){
             query._id = new ObjectId(body.id)
         }
         if(body?.title){
-            query.t_title = {  $regex: body?.title, $options: 'i' }
+            query.title = {  $regex: body?.title, $options: 'i' }
         }
         if(body?.name){
-            query.t_name = {  $regex: body?.name }
+            query.name = {  $regex: body?.name }
         }
         if(body?.start_time && body?.end_time){
-            query.t_date = {
+            query.date = {
                 $gte: body.start_time,
                 $lte: body.end_time
             }
@@ -150,6 +150,51 @@ export class Notice_Router{
             }
         }catch (err){
             throw new CustomError("获取公告列表失败", STATE_CODE.SUCCESS);
+        }
+    }
+    static async updateNoticeDetail(req,reply){
+        const { body } = req
+        let { id,...params } = body
+        if(!body.id){
+            throw new CustomError("公告ID不可为空");
+        }
+        const db_notice =  db.mongo.test_db.collection('notice')
+        let updateObj = {}
+        let noticeInfo = await db_notice.findOne({
+            _id:new ObjectId(body.id),
+        })
+        console.log('查询出对应公告信息',noticeInfo)
+        if(!noticeInfo){
+            throw new CustomError("该公告不存在");
+        }
+        for(let i in noticeInfo){
+            updateObj[i] = params[i] ? params[i] : noticeInfo[i]
+        }
+        if(!updateObj.title){
+            throw new CustomError("标题不能为空");
+        }
+        if(!updateObj.date){
+            throw new CustomError("发布时间不能为空");
+        }
+        if(!updateObj.vaerifyTimestamp(date)){
+            throw new CustomError("时间戳不正确");
+        }
+        if(!updateObj.content){
+            throw new CustomError("公告内容不能为空");
+        }
+        try {
+            console.log('需要修改的对象',updateObj)
+            await  db_notice.updateOne(
+                {_id:new ObjectId(id)},
+                { $set:updateObj }
+            )
+            return {
+                code: STATE_CODE.SUCCESS,
+                data: {},
+                message: "编辑公告成功"
+            }
+        }catch (err){
+            throw new CustomError("编辑公告失败");
         }
     }
 }

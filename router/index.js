@@ -26,4 +26,5 @@ export async function api_router(fastify) {
     RouteAdd('POST','/notice/delete',Notice_Router.deletNotice)
     RouteAdd('POST','/notice/getList',Notice_Router.getNoticeList)
     RouteAdd('POST','/notice/detail',Notice_Router.getNoticeDetail)
+    RouteAdd('POST','/notice/edit',Notice_Router.updateNoticeDetail)
 }
