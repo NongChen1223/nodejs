@@ -1,6 +1,6 @@
 import { Notice_Router } from  '../views/notice.js'
 import { API_JSON_SCHEMA} from "../common/constant.js";
-
+import  i18next from 'i18next';
 export async function api_router(fastify) {
 
     // console.log('开始路由', fastify)
@@ -18,15 +18,15 @@ export async function api_router(fastify) {
         return {
             code: 200,
             data: {
-                msg: '嘿嘿嘿 老子来了嗷'
+                msg:i18next.t('key')
             },
             message: 'cnm'
         }
     });
-    RouteAdd('POST','/notice/add',Notice_Router.addNotice)
-    RouteAdd('POST','/notice/update',Notice_Router.updateNotice)
-    RouteAdd('POST','/notice/delete',Notice_Router.deletNotice)
-    RouteAdd('POST','/notice/getList',Notice_Router.getNoticeList)
-    RouteAdd('POST','/notice/detail',Notice_Router.getNoticeDetail)
-    RouteAdd('POST','/notice/edit',Notice_Router.updateNoticeDetail)
+    // RouteAdd('POST','/notice/add',Notice_Router.addNotice)
+    // RouteAdd('POST','/notice/update',Notice_Router.updateNotice)
+    // RouteAdd('POST','/notice/delete',Notice_Router.deletNotice)
+    // RouteAdd('POST','/notice/getList',Notice_Router.getNoticeList)
+    // RouteAdd('POST','/notice/detail',Notice_Router.getNoticeDetail)
+    // RouteAdd('POST','/notice/edit',Notice_Router.updateNoticeDetail)
 }

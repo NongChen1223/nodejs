@@ -3,8 +3,8 @@ import  { STATE_CODE } from  "../common/status.js";
 import { db } from  '../util/mongodb.js'
 import { ObjectId  } from "mongodb";
 import  { vaerifyTimestamp } from  '../util/verify.js'
-console.log('路由文件被执行')
-const db_notice =  db.mongo.test_db.collection('bulletin');
+// console.log('路由文件被执行')
+
 
 export class Notice_Router{
     static async addNotice(req,reply){
@@ -24,6 +24,7 @@ export class Notice_Router{
             t_date = body?.date
         }
         try {
+            const db_notice =  db.mongo.test_db.collection('bulletin');
             let res = await db_notice.insertOne({
                 date,
                 title:body.title,
@@ -47,7 +48,7 @@ export class Notice_Router{
             throw new CustomError("请传入公告ID", STATE_CODE.SUCCESS);
         }
         try {
-
+            const db_notice =  db.mongo.test_db.collection('bulletin');
             const res = db_notice.updateMany(
                 { _id:{ $in:body.ids.map(id=> new ObjectId(id)) } },
                 { $set: { "isDelete": true }}
@@ -72,6 +73,7 @@ export class Notice_Router{
             throw new CustomError("请传入正确的公告状态", STATE_CODE.SUCCESS);
         }
         try {
+            const db_notice =  db.mongo.test_db.collection('bulletin');
             const res = db_notice.updateMany(
                 { _id:{ $in:body.ids.map(id=> new ObjectId(id)) } },
                 { $set: { "status": body?.status }}
@@ -93,6 +95,7 @@ export class Notice_Router{
             throw new CustomError("请传入公告ID", STATE_CODE.SUCCESS);
         }
         try {
+            const db_notice =  db.mongo.test_db.collection('bulletin');
             const res = await db_notice.findOne({
                 _id:new ObjectId(body.id),
                 isDelete:false
@@ -130,6 +133,7 @@ export class Notice_Router{
             }
         }
         try {
+            const db_notice =  db.mongo.test_db.collection('bulletin');
             const total = await db_notice.countDocuments(query)
             console.log('查询总页数',total)
             const list = await db_notice
@@ -157,6 +161,7 @@ export class Notice_Router{
             throw new CustomError("公告ID不可为空");
         }
         let updateObj = {}
+        const db_notice =  db.mongo.test_db.collection('bulletin');
         let noticeInfo = await db_notice.findOne({
             _id:new ObjectId(body.id),
         })
