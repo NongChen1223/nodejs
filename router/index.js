@@ -1,6 +1,8 @@
 import { Notice_Router } from  '../views/notice.js'
 import { API_JSON_SCHEMA} from "../common/constant.js";
+
 export async function api_router(fastify) {
+
     // console.log('开始路由', fastify)
     function RouteAdd(method = 'POST', path = '', handler) {
         fastify.route({

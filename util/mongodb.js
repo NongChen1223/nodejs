@@ -1,4 +1,5 @@
 import {MongoClient} from "mongodb";
+import config from "config"
 class MongoUtil{
     static instance = null;
     URL
@@ -24,6 +25,7 @@ class MongoUtil{
     test_db_connect(){
         try {
             this.test_db =  this.client.db('xww_test_mongdb')
+            console.log("初始化test_db成功")
         }catch (err){
             console.log('获取xww_test_mongdb失败!!!',err);
         }
@@ -37,7 +39,8 @@ class MongoUtil{
     }
 }
 const db_config = {
-    url:'mongodb://192.168.150.236:27017'
+    // url:'mongodb://192.168.150.236:27017'
+    url:config.get("mongo_test.url")
 }
 export class db{
     static mongo = new MongoUtil(db_config)

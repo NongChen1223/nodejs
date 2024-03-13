@@ -2,9 +2,6 @@ import mongodb from 'mongodb'
 
 const {MongoClient} = mongodb
 
-const URL = 'mongodb://192.168.150.236:27017'
-const DB_NAME = 'xww_test_mongdb'
-const TABLE_NAME = 'notice'
 
 const client = new MongoClient(URL)
 

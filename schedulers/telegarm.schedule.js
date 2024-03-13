@@ -6,18 +6,19 @@ const db_telegram = db.mongo.test_db.collection('telegram_number')
 
 
 // 创建一个定时任务，每分钟执行一次
-const job = schedule.scheduleJob('*/10 * * * * *', function () {
-    console.log('定时任务启动');
+const job = schedule.scheduleJob('* * * * *', function () {
     try {
         getTelegramNumber(1)
     } catch (err1) {
+        console.log('err1 Telegram 定时任务！！',err1)
         try {
             getTelegramNumber(2)
         } catch (err2) {
+            console.log('err2 Telegram 定时任务！！',err2)
             try {
                 getTelegramNumber(3)
             } catch (err3) {
-
+                console.log('err3 Telegram 定时任务！！',err3)
             }
         }
     }
@@ -25,21 +26,24 @@ const job = schedule.scheduleJob('*/10 * * * * *', function () {
 });
 //type 1 第一次就成功 2第二次请求才成功 3只能获取上一次数据
 async function getTelegramNumber(type = 1) {
+    console.log('getTelegramNumber！！！！',type)
     if (type === 1 || type === 2) {
         const res = await TelegramGetMember()
         let creat_time = new Date().getTime()
         db_telegram.insertOne({
             creat_time,
-            count: res.result,
+            count: res,
+            type
         })
     } else if (type === 3) {
         //查找最后一条数据插入
-        let last = db_telegram.findOne({}, {sort: {_id: -1}})
+        let last = await db_telegram.findOne({}, {sort: {_id: -1}})
+        // console.log('查找最后一条数据',last)
         let creat_time = new Date().getTime()
         db_telegram.insertOne({
             creat_time,
             count: last.count,
+            type
         })
     }
-
 }
