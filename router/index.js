@@ -5,6 +5,7 @@ export async function api_router(fastify) {
 
     // console.log('开始路由', fastify)
     function RouteAdd(method = 'POST', path = '', handler) {
+        console.log('RouteAdd',handler)
         fastify.route({
             method:method,
             path,
@@ -18,7 +19,7 @@ export async function api_router(fastify) {
         return {
             code: 200,
             data: {
-                msg:i18next.t('key')
+                msg:i18next.t('lan.global.succeed')
             },
             message: 'cnm'
         }

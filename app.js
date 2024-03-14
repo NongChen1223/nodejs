@@ -1,7 +1,7 @@
 import Fastify from 'fastify';
 import { api_router } from './router/index.js'
 import { db } from  './util/mongodb.js'
-import { initI18n } from './language/index.js'
+import { initI18n,chageLang } from './language/index.js'
 const fastify = Fastify({
     bodyLimit: 512 * 1024 * 1024
 });
@@ -9,6 +9,14 @@ const fastify = Fastify({
   run server!
 */
 fastify.register(api_router,{prefix: "/dev/"})
+
+/*
+* 请求钩子 通过header获取语言切换
+* */
+fastify.addHook('onRequest', (request, reply,done) => {
+    chageLang(request.headers.lang)
+    done()
+})
 const startServer = async ()=>{
     console.log('start !!!!')
     try{
