@@ -22,7 +22,7 @@ const startServer = async ()=>{
     try{
         await db.mongo.connect() //创建连接池
         await db.mongo.test_db_connect()//连接指定数据库
-        await fastify.listen({ port:3000, host: '0.0.0.0' })
+        // await fastify.listen({ port:3000, host: '0.0.0.0' })
         // import ("./schedulers/index.js")
         initI18n()
     }catch(err){
