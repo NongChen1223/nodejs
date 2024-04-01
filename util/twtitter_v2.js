@@ -4,15 +4,15 @@ import axios from "axios";
 * https://rapidapi.com/alexanderxbx/api/twitter-api45
 * 第三方来源
 * */
-const ChainingViewID = '1724003143040790528'
+const ChainingViewID = ''
 async function getChainingViewFollowers(){
     try {
         const apiClient = axios.create({
             baseURL:`https://twitter-api45.p.rapidapi.com/`,
             timeout:10000,
             params:{
-                rest_id:ChainingViewID,
-                screenname:'ChainingView'
+                rest_id:'',
+                screenname:''
             },
             headers:{
                 // 'X-RapidAPI-Key': '1cc50c91famsh21a6c5eef582075p1ef43cjsn4ef43ced59b1',
