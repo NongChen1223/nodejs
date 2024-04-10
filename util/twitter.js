@@ -10,13 +10,13 @@ async function getChainingViewFollowers(){
             baseURL:`https://twitter-api45.p.rapidapi.com/`,
             timeout:20000,
             params:{
-                rest_id:"1724003143040790528",
-                screenname:'ChainingView'
+                rest_id:"",
+                screenname:''
             },
             headers:{
                 // 'X-RapidAPI-Key': config.get("twtter.RapidAPI_key"),
                 // 'X-RapidAPI-Host': config.get("twtter.RapidAPI_host")
-                'X-RapidAPI-Key': "6b81f585b8mshc8fd3512812b90bp1d51ccjsnfb476aaf4fd8",
+                'X-RapidAPI-Key': "",
                 'X-RapidAPI-Host': "twitter-api45.p.rapidapi.com"
             },
         })
