@@ -10,7 +10,7 @@ async function initBrowser() {
         const page = await browser.newPage();
         await new Promise(resolve => setTimeout(resolve, 1000)); // 等待 1 秒钟
         const allTokenList = []
-        const page_current = 1 //爬取前5页 指定页数
+        const page_current = 20 //爬取前5页 指定页数
         for (let i = 1; i <= page_current; i++) {
             let path = `https://etherscan.io/tokens?p=${i}`
             const tokenList = await getWebElement(page,path)
